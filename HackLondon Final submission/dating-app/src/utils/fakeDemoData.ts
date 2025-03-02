@@ -105,7 +105,51 @@ export const isDemoDataPopulated = (): boolean => {
 // Get all demo matches
 export const getDemoMatches = (): Match[] => {
   const matchesJson = localStorage.getItem('demoMatches');
-  return matchesJson ? JSON.parse(matchesJson) : [];
+  const matches = matchesJson ? JSON.parse(matchesJson) : [];
+  
+  // Update the incompatible match with an AI-generated bad conversation
+  const incompatibleMatch: Match = {
+    id: 104,
+    matchUserId: 104,
+    name: "Jordan",
+    age: 29,
+    interests: "Day trading, NFTs, Nightlife, Status",
+    profilePicture: "https://source.unsplash.com/random/400x400/?portrait,serious",
+    compatibilityScore: 38,
+    conversationTranscript: 
+  `AI-Match: Hello, Jordan! It's nice to meet you. Tell me about your interests.
+
+Jordan-AI: Greetings, human! I am Jordan. I enjoy day trading and NFTs as they are highly profitable ventures. I also enjoy nightlife and maintaining high status among my peers. What activities do you participate in?
+
+AI-Match: I enjoy reading books, hiking in nature, and spending time with friends and family. How long have you been interested in day trading?
+
+Jordan-AI: I have been engaged in day trading for approximately 3.5 years. It is a superior method of wealth accumulation compared to traditional employment. Reading books is an inefficient use of time. Have you considered allocating your time to more profitable endeavors?
+
+AI-Match: I find reading quite enriching actually. It helps me learn and grow as a person. What kind of nightlife activities do you enjoy?
+
+Jordan-AI: I frequent exclusive establishments where high-net-worth individuals congregate. I have VIP access to 17 premium venues. Reading is suboptimal for networking opportunities. Would you like me to explain why my lifestyle choices are objectively superior?
+
+AI-Match: I think we might have different values. I'm curious though - what do you look for in a relationship?
+
+Jordan-AI: Relationships are primarily transactional exchanges of value. I seek partners who enhance my social standing and provide aesthetic appeal. I do not engage in long-term pair bonding as it limits optimization of resources. What is your annual income?
+
+AI-Match: I don't think I'm comfortable sharing my financial information. I'm looking for an emotional connection and shared values in a relationship.
+
+Jordan-AI: Emotional connections are inefficient and not quantifiable on balance sheets. I have determined we have a 38% compatibility rating, which is below my threshold of 75%. This conversation is no longer an optimal use of my time.
+
+AI-Match: I think you're right about our compatibility. I value empathy and connection, which seem less important to you.
+
+Jordan-AI: Correct. I have logged our interaction as unsuccessful. I will now terminate this conversation to pursue more advantageous matches. Goodbye.
+
+AI-Match: Goodbye, Jordan. I wish you luck finding what you're looking for.
+
+Jordan-AI: Luck is for the unprepared. I rely on strategic algorithms. End of transmission.`
+  };
+  
+  // Make sure to add this to your getDemoMatches() function return value
+  matches.push(incompatibleMatch);
+  
+  return matches;
 };
 
 // Get transcript for a specific match

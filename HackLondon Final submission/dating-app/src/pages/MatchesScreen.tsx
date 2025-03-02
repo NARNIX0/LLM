@@ -28,6 +28,11 @@ const MatchesScreen: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [matches, setMatches] = useState<Match[]>([]);
   const [showPlaceholder, setShowPlaceholder] = useState(false);
+  const [isLiveReplay, setIsLiveReplay] = useState(false);
+  const [replayMessages, setReplayMessages] = useState<string[]>([]);
+  const [isReplayComplete, setIsReplayComplete] = useState(false);
+  const [activeChatbot, setActiveChatbot] = useState<any>(null);
+  const [currentMatch, setCurrentMatch] = useState<Match | null>(null);
   
   // Get user ID - if profile is initialized, use the stored ID
   const userId = localStorage.getItem('currentUserId') || '1';
@@ -152,6 +157,31 @@ const MatchesScreen: React.FC = () => {
     );
   };
 
+  // Function to handle live chat replay
+  const handleLiveChatReplay = (match) => {
+    setIsLiveReplay(true);
+    setReplayMessages([]);
+    setIsReplayComplete(false);
+    setCurrentMatch(match);
+    
+    // Use either the active chatbot or create a message array from the match's transcript
+    const currentMatch = match || activeChatbot;
+    const allMessages = currentMatch?.conversationTranscript?.split('\n') || [];
+    let messageIndex = 0;
+    
+    const displayNextMessage = () => {
+      if (messageIndex < allMessages.length) {
+        setReplayMessages(prev => [...prev, allMessages[messageIndex]]);
+        messageIndex++;
+        setTimeout(displayNextMessage, 1000); // 1 second delay between messages
+      } else {
+        setIsReplayComplete(true);
+      }
+    };
+    
+    displayNextMessage();
+  };
+
   return (
     <Container maxWidth="lg">
       <Box sx={{ py: 4 }}>
@@ -212,9 +242,9 @@ const MatchesScreen: React.FC = () => {
                         variant="outlined" 
                         color="primary"
                         startIcon={<ChatIcon />}
-                        onClick={() => handleViewConversation(match.matchUserId)}
+                        onClick={() => handleLiveChatReplay(match)}
                       >
-                        View Conversation
+                        Live Chat Replay
                       </Button>
                       
                       <Button 
@@ -226,6 +256,47 @@ const MatchesScreen: React.FC = () => {
                         Full Transcript
                       </Button>
                     </Box>
+
+                    {isLiveReplay && match.id === (currentMatch?.id || -1) && (
+                      <Box sx={{ mt: 3, p: 2, bgcolor: 'background.paper', borderRadius: 1, boxShadow: 1 }}>
+                        <Typography variant="h6" gutterBottom>
+                          Live Chat Replay {!isReplayComplete && 
+                            <Box component="span" sx={{ display: 'inline-block', ml: 1 }}>
+                              <CircularProgress size={16} />
+                            </Box>
+                          }
+                        </Typography>
+                        
+                        <Box sx={{ maxHeight: 300, overflowY: 'auto', pt: 1 }}>
+                          {replayMessages.map((message, index) => (
+                            <Typography 
+                              key={index} 
+                              variant="body2" 
+                              sx={{ 
+                                mb: 1, 
+                                p: 1, 
+                                bgcolor: index % 2 === 0 ? 'primary.light' : 'secondary.light',
+                                borderRadius: 1,
+                                color: index % 2 === 0 ? 'primary.contrastText' : 'secondary.contrastText' 
+                              }}
+                            >
+                              {message}
+                            </Typography>
+                          ))}
+                        </Box>
+                        
+                        {isReplayComplete && (
+                          <Button 
+                            size="small" 
+                            variant="outlined" 
+                            sx={{ mt: 2 }}
+                            onClick={() => setIsLiveReplay(false)}
+                          >
+                            Close Replay
+                          </Button>
+                        )}
+                      </Box>
+                    )}
                   </CardContent>
                 </Card>
               </Grid>

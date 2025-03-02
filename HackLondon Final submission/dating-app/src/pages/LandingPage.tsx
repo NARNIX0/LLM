@@ -112,6 +112,17 @@ const LandingPage: React.FC = () => {
           >
             View Demo Matches
           </Button>
+          
+          <Button
+            variant="contained"
+            color="secondary"
+            size="large"
+            onClick={() => navigate('/ai-chat-simulation')}
+            sx={{ mt: 2, mb: 4 }}
+            startIcon={<ChatIcon />}
+          >
+            Watch AI Match Simulation
+          </Button>
         </Box>
       </Box>
       

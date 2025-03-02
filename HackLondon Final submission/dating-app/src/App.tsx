@@ -11,6 +11,7 @@ import ConversationScreen from './pages/ConversationScreen.tsx';
 import MatchesScreen from './pages/MatchesScreen.tsx';
 import TranscriptViewer from './pages/TranscriptViewer.tsx';
 import LoadingScreen from './pages/LoadingScreen.tsx';
+import AIChatSimulation from './pages/AIChatSimulation.tsx';
 
 // Import components
 import Navigation from './components/Navigation.tsx';
@@ -109,6 +110,7 @@ function App() {
               <Route path="/matches" element={<MatchesScreen />} />
               <Route path="/transcript/:matchId" element={<TranscriptViewer />} />
               <Route path="/loading" element={<LoadingScreen />} />
+              <Route path="/ai-chat-simulation" element={<AIChatSimulation />} />
             </Routes>
           </Box>
         </Box>
